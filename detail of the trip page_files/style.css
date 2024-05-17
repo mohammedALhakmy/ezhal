@@ -1,0 +1,92 @@
+* {
+  font-family: "Noto Kufi Arabic", sans-serif !important;
+}
+
+.navbar-collapse {
+  width: 100%;
+}
+
+.navbar-nav {
+  align-items: center !important;
+  width: 100% !important;
+  justify-content: space-around;
+  margin: 0 !important;
+}
+
+.navbar-nav a {
+  color: #06657a !important;
+  font-size: 19px !important;
+  transition: all 0.3s;
+}
+
+a:hover {
+  color: #F57300 !important;
+}
+
+.nav-link.active {
+  color: #F57300 !important;
+}
+
+.form-container {
+  width: 70%;
+  margin: 130px auto;
+  height: 500px;
+  border: 3px solid #d0f5f8;
+  padding: 15px;
+  border-radius: 20px;
+}
+
+.form-container form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.form-container form .container {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+.form-container form .big {
+  display: flex;
+  flex-direction: column;
+  width: 93%;
+}
+
+label {
+  font-size: 16px;
+  color: #000;
+  font-weight: 700;
+}
+
+input, select {
+  border: 2px solid #06657a;
+  border-radius: 15px;
+  padding: 4px 4px;
+}
+
+.form-container form button {
+  background: #06657a;
+  width: 20%;
+  font-size: 20px;
+  margin-top: 10px;
+  color: #fff;
+  padding: 3px 19px;
+  text-decoration: none;
+  border: 1px solid #fff;
+  box-shadow: 0 0 3px 2px #06657a;
+}
+
+@media (max-width: 850px) {
+  .form-container form .container, .big {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .form-container {
+    height: auto;
+  }
+}
