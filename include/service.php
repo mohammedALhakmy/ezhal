@@ -9,10 +9,14 @@ if ($services) {
 foreach ($services as $service) { ?>
     <a href="service_one.php?id=<?php echo $service['id']?>">
         <div class="card1">
-            <div class="titlee"><p><?php echo $service['service_name']; ?></p></div>
+            <div class="titlee">
+                <p><?php echo $service['service_name']; ?></p>
+                <p class="text-black-50">SR.<?php echo $service['price']; ?></p>
+            </div>
             <img src="img/<?php echo $service['service_img']; ?>">
             <div class="layer"></div>
             <div class="info">
+
                 <p><?php echo $service['service_notes']; ?></p>
                 <button> للمزيد</button>
             </div>

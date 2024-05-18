@@ -1,5 +1,7 @@
 <?php
 include 'master.php';
+if(isset($_SESSION['uid'])){
+    header('Location: services.php');  }
 ?>
     <div class="d-flex justify-content-center align-items-center vh-100">
         <form class="shadow w-450 p-3" action="cod6e.php" method="post">

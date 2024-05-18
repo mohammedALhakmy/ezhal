@@ -1,10 +1,10 @@
 <?php
 
-include '/db/db_connect.php';
-
-$query = mysqli_query($conn, "SELECT * FROM trips");
-
-?>
+//include '/db/db_connect.php';
+//
+//$query = mysqli_query($conn, "SELECT * FROM trips");
+//
+//?>
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -56,26 +56,26 @@ $query = mysqli_query($conn, "SELECT * FROM trips");
                             <div class="row mb-3">
                                 <div class="col-md-5">
                                     <select name="from-trip" id="" class="from-trip form-select border-dark">
-                                        <?php
-                                        if ($query && mysqli_num_rows($query) > 0) {
-                                            while ($item = mysqli_fetch_assoc($query)) {
-                                                echo "<option value='" . $item['id'] . "'>" . $item['from'] . "</option>";
-                                            }
-                                        }
-                                        ?>
+<!--                                        --><?php
+//                                        if ($query && mysqli_num_rows($query) > 0) {
+//                                            while ($item = mysqli_fetch_assoc($query)) {
+//                                                echo "<option value='" . $item['id'] . "'>" . $item['from'] . "</option>";
+//                                            }
+//                                        }
+//                                        ?>
                                     </select>
                                     <p class="error-from-trip"></p>
                                 </div>
                                 <div class="col-md-5">
                                     <select name="to-trip" id="" class="to-trip form-select border-dark">
-                                        <?php
-                                        if ($query && mysqli_num_rows($query) > 0) {
-                                            mysqli_data_seek($query, 0); // Reset the pointer to the beginning
-                                            while ($item = mysqli_fetch_assoc($query)) {
-                                                echo "<option value='" . $item['id'] . "'>" . $item['to'] . "</option>";
-                                            }
-                                        }
-                                        ?>
+<!--                                        --><?php
+//                                        if ($query && mysqli_num_rows($query) > 0) {
+//                                            mysqli_data_seek($query, 0); // Reset the pointer to the beginning
+//                                            while ($item = mysqli_fetch_assoc($query)) {
+//                                                echo "<option value='" . $item['id'] . "'>" . $item['to'] . "</option>";
+//                                            }
+//                                        }
+//                                        ?>
                                     </select>
                                     <p class="error-to-trip"></p>
                                 </div>

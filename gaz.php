@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-if (isset($_SESSION['id']) && isset($_SESSION['fname'])) {
+if (isset($_SESSION['uid']) && isset($_SESSION['uname'])) {
 
     include "db_conn.php";
     include 'php/User.php';
-    $user = getUserById($_SESSION['id'], $conn);
+//    $user = getUserById($_SESSION['uid'], $conn);
 } else {
     header("Location: login.php");
     exit;

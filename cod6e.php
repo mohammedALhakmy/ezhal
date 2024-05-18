@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['submit'])){
                 if(password_verify($password, $beneficiary['Password'])){
                     $_SESSION['uid']   =    $beneficiary['ID_Number'];
                     $_SESSION['uname'] =  $beneficiary['Fname'];
-                    $_SESSION['uemail']= $beneficiary['Email'];
+                    $_SESSION['uemail'] = $beneficiary['Email'];
+                    $_SESSION['bene_dashboard'] = $beneficiary['ID_Number'];
                     header('location:bene_dashboard.php');
                     exit();
                 } else {
@@ -38,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['submit'])){
                     $_SESSION['uid']   =    $beneficiary['ID_Number'];
                     $_SESSION['uname'] =  $beneficiary['Fname'];
                     $_SESSION['uemail']= $beneficiary['Email'];
+                    $_SESSION['delivery_dashboard']   =    $beneficiary['ID_Number'];
                     header('location: delivery_dashboard.php');
                     exit();
                 } else {
@@ -55,46 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['submit'])){
         echo "Failed to connect to database: " . $e->getMessage();
     }
 }
-if(isset($_POST['login'])){
-    $user = mysqli_real_escape_string($conn, $_POST['user']);
-    $password = $_POST['password'];
-
-    if(empty($user)){
-        echo '<div class="alert alert-danger" role="alert">ادخل اسم المستخدم او البريد الالكتروني</div>';
-    } elseif(empty($password)){
-        echo '<div class="alert alert-danger" role="alert">ادخل كلمة المرور</div>';
-    } else{
-        $sql = "SELECT * FROM users WHERE (username = ? OR email = ?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ss", $user, $user);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if(mysqli_num_rows($result) > 0){
-            $userData = mysqli_fetch_assoc($result);
-            if(password_verify($password, $userData['password'])){
-                $_SESSION['id'] = $userData['user_id'];
-                $_SESSION['user'] = $userData['username'];
-                $_SESSION['email'] = $userData['email'];
-                $_SESSION['role'] = $userData['role'];
-                $_SESSION['uni_id'] = $userData['uni_id'];
-                $_SESSION['col_id'] = $userData['col_id'];
-                $_SESSION['dep_id'] = $userData['dep_id'];
-                $_SESSION['lap_id'] = $userData['lap_id'];
-                $_SESSION['loged'] = true;
-                header("location: ./index.php");
-                exit();
-            } else {
-                echo '<div class="alert alert-danger" role="alert">اسم الدخول او كلمة المرور غير صحيحة</div>';
-            }
-        } else {
-            echo '<div class="alert alert-danger" role="alert">اسم الدخول او البريد الالكتروني غير موجود</div>';
-        }
-
-        mysqli_stmt_close($stmt);
-    }
-}
-
 
 
 if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['cod6e'])){
@@ -102,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['cod6e'])){
     $Lname = $_POST['Lname'];
     $Email = strtolower($_POST['Email']);
     $type = $_POST['type'];
+
     $Password =password_hash($_POST['Password'],PASSWORD_BCRYPT,["cost"=>6]);
     try {
         if ($type == 1) {
@@ -111,15 +74,49 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['cod6e'])){
 //            header('location: bene_dashboard.php');
             header('location: login.php');
         } elseif ($type == 2) {
-            $stmt = $conn->prepare("INSERT INTO `delivery_agent`(`Fname`, `Lname`, `Email`, `Password`)
-                                VALUES (:Fname, :Lname, :Email, :Password)");
-            $stmt->execute(['Fname' => $Fname, 'Lname' => $Lname, 'Email' => $Email, 'Password' => $Password]);
+            $delivery_option = $_POST['delivery_option'];
+            $stmt = $conn->prepare("INSERT INTO `delivery_agent`(`Fname`, `Lname`, `Email`, `Password`,`Availability`)
+                                VALUES (:Fname, :Lname, :Email, :Password,:Availability)");
+            $stmt->execute(['Fname' => $Fname, 'Lname' => $Lname, 'Email' => $Email, 'Password' => $Password,'Availability'=>$delivery_option]);
 //            header('location: delivery_dashboard.php');
             header('location: login.php');
         }
     } catch(PDOException $e) {
         echo "فشل التحميل: " . $e->getMessage();
     }
+}
+
+
+if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['checkout'])){
+    $Order_Namber = rand(10000,100000);
+    $Order_Date = date("Y-m-d");
+    $Order_Time = date("H:m");
+    $type_sevices = $_POST['type_sevices'];
+    $Quantity = $_POST['Quantity'];
+    $price = $_POST['price']*$Quantity;
+    $VAT = $price * 0.15;
+    $totalPrice = $price + $VAT;
+    $location = $_POST['location'];
+    $delivery_agent_id = $_POST['delivery_agent_id'];
+    $sessionID = $_SESSION['uid'];
+    $type = $_POST['type'];
+    $Card_Number = $_POST['Card_Number'];
+    $Catd_Type = $_POST['Catd_Type'];
+    $Expired_Date = $_POST['Expired_Date'];
+    $Name_Card = $_POST['Name_Card'];
+    $status = "pending";
+
+    $stmt = $conn->prepare("INSERT INTO `payment`(`Card_Number`, `Catd_Type`, `Expired_Date`, `Name_Card`)
+                                VALUES (:Card_Number, :Catd_Type, :Expired_Date,:Name_Card)");
+    $stmt->execute(['Card_Number' => $Card_Number, 'Catd_Type' => $Catd_Type, 'Expired_Date' => $Expired_Date, 'Name_Card' => $Name_Card]);
+
+    $stmt = $conn->prepare("INSERT INTO `gasoline`(`Order_Namber`, `type_sevices`, `location`, `Quantity`,`Order_Date`,`Order_Time`,`price`,`VAT`,`delivery_agent_id`,
+                       `beneficiary_id`,`type_s`,`status`)
+                                VALUES (:Order_Namber, :type_sevices, :location, :Quantity,:Order_Date,:Order_Time,:price,:VAT,:delivery_agent_id,:beneficiary_id,:type_s,:status)");
+    $stmt->execute(['Order_Namber' => $Order_Namber, 'type_sevices' => $type_sevices, 'location' => $location, 'Quantity' => $Quantity,'Order_Date'=>$Order_Date,
+        'Order_Time'=>$Order_Time,'price'=>$totalPrice,'VAT'=>$VAT,'delivery_agent_id'=>$delivery_agent_id,'beneficiary_id'=>$sessionID,'type_s'=>$type,'status'=>$status]);
+    header('location:bene_dashboard.php');
+    exit();
 }
 
 

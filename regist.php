@@ -1,9 +1,11 @@
 <?php
 include 'master.php';
+if(isset($_SESSION['uid'])){
+    header('Location: services.php');  }
 ?>
-    <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="d-flex justify-content-center align-items-center vh-100  mt-5">
     	
-    	<form class="shadow w-450 p-3" 
+    	<form class="shadow w-450 p-3 mt-5"
     	      action="cod6e.php"
     	      method="post"
     	      enctype="multipart/form-data">
@@ -58,12 +60,39 @@ include 'master.php';
                     <option value="2">موظف توصيل</option>
                 </select>
             </div>
-		  
-		  <button type="submit" name="cod6e" class="btn btn-primary">تسجيل</button>
+
+            <div class="form-control mt-3" id="delivery-options" style="display: none;">
+                <div class="form-control">
+                    <label for="">خيارات موظف التوصيل</label>
+                    <select name="delivery_option" id="delivery_option">
+                        <option value="1">مندوب بريد ازهل</option>
+                        <option value="2">الإنتقال بين المدن</option>
+                        <option value="3">سائق خاص </option>
+                        <option value="4">إيصال بنزين</option>
+                        <option value="5">إيصال غاز</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <button type="submit" name="cod6e" class="btn btn-primary">تسجيل</button>
 		  <a href="login.php" class="link-secondary">تسجيل الدخول</a>
 		</form>
     </div>
+    <script>
+        document.getElementById('type').addEventListener('change', function() {
+            var type = this.value;
+            var deliveryOptions = document.getElementById('delivery-options');
+
+            if (type == 2) {
+                deliveryOptions.style.display = 'block';
+            } else {
+                deliveryOptions.style.display = 'none';
+            }
+        });
+    </script>
 <?php
 include 'include/script.php';
+
 include 'include/footer.php';
 ?>
