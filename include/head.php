@@ -40,14 +40,14 @@
         label {
             display: block;
             margin-bottom: 5px;
-            font-size: 20px;
+            font-size: 13px;
         }
         input[type="text"], select {
             width: 100%;
-            padding: 10px;
+            /*padding: 10px;*/
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 18px;
+            /*font-size: 12px;*/
         }
         .btn {
             background-color: #4caf50;

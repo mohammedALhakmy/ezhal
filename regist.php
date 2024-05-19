@@ -3,7 +3,7 @@ include 'master.php';
 if(isset($_SESSION['uid'])){
     header('Location: services.php');  }
 ?>
-    <div class="d-flex justify-content-center align-items-center vh-100  mt-5">
+    <div class="d-flex justify-content-center align-items-center  mt-5">
     	
     	<form class="shadow w-450 p-3 mt-5"
     	      action="cod6e.php"
@@ -79,6 +79,11 @@ if(isset($_SESSION['uid'])){
 		  <a href="login.php" class="link-secondary">تسجيل الدخول</a>
 		</form>
     </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <script>
         document.getElementById('type').addEventListener('change', function() {
             var type = this.value;
