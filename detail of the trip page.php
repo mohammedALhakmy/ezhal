@@ -4,9 +4,9 @@
 <?php
 
 
-if(isset($_POST['trip_id'])){
-  $trip_id = $_POST['trip_id'];
-}
+//if(isset($_POST['trip_id'])){
+//  $trip_id = $_POST['trip_id'];
+//}
 
 
 ?>
@@ -44,7 +44,7 @@ if(isset($_POST['trip_id'])){
 
 <body>
 <?php
-include('master.php');
+//include('master.php');
 ?>
 
 

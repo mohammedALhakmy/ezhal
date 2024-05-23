@@ -64,4 +64,202 @@
         .star-required {
             color: red;
         }
+        .container-82o {
+            max-width: 100%;
+            background-color: #EEF9FF;
+            border-radius: 10px;
+            opacity: 80%;
+            text-align: center;
+            box-shadow: #000;
+            padding: 0 10px;
+        }
+        .text-imm p  {
+            color: black;
+            font-size: 25px;
+            text-align: center;
+            line-height: 4;
+            margin: 12;
+        }
+        .btn-f9s {
+            padding: 10px;
+            border: 1px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            background-color: #06657A;
+            text-align: center;
+            direction: ltr;
+            width: fit-content;
+            margin: 0px 30%;
+            box-shadow: 0 20px 20px rgba(117, 116, 116, 0.7);
+        }
+    </style>
+
+
+    <style>
+
+        table {
+
+
+            margin: 2em auto;
+            border-collapse: collapse;
+            width: 90%;
+            min-width: 300px;
+            /*  border: 1px solid #06657A;*/
+            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+            border-radius: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #06657A;
+            color: white;
+            box-shadow:none;
+
+        }
+        th:first-child {
+            border:none;
+            box-shadow:none;
+            /* border-top-right-radius: 30px; */
+            border-start-start-radius: 80px 80px;
+        }
+        .last-row {
+            border:none;
+            /* border-bottom-left-radius: 30px; */
+            border-end-end-radius: 80px 80px;
+            direction: rtl;
+
+        }
+
+        h1 {
+            text-align: center;
+            animation: fadeIn 3s infinite;
+            margin-top: 20px;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        .edit-btn, .delete-btn {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 1.2em; /* Larger icons for better visibility */
+        }
+        .delete-btn{color: red;}
+        .fas { /* Additional styling for Font Awesome icons */
+            margin-right: 5px;
+        }
+
+        .fas .fa-edit{color: blue;}
+        .main-heading{color: #06657A;}
+
+        tr:hover {
+            border: none;
+            background-color: #f5f5f5;
+            transform: scale(1.02);
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2), -1px -1px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+        tr:first-child:hover {
+            border: none;
+            box-shadow: none;
+        }
+
+        tr:last-child:hover {
+
+            box-shadow:none;
+        }
+
+        @media only screen and (max-width: 768px) {
+            body {
+                font-size: 14px;
+            }
+        }
+
+        .filter-box {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .filter-input, .filter-select {
+            padding: 10px;
+            width: 50%;
+            max-width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .filter-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #06657A;
+            color: white;
+            cursor: pointer;
+        }
+
+
+    </style>
+
+
+    <style>
+
+
+        .content {
+            width: 100%;
+        }
+
+        .content h4 {
+            color: #06657A;
+            padding-right: 10px;
+            text-align: right;
+        }
+
+        #regForm .content {
+            display: none;
+        }
+
+        .step {
+            margin: 0 15px;
+            font-size: 20px;
+            opacity: 0.5;
+            color: #DDDDDD;
+        }
+
+        .step.active {
+            opacity: 1;
+            color: #06657A;
+        }
+
+        /* Mark the steps that are finished and valid: */
+
+
+        .image-container {
+            max-width: 600px;
+            margin: 40px;
+            height: 100%;
+        }
+
+        .image-container img {
+            max-width: 85%;
+            height: auto;
+            border-radius: 10px;
+
+        }
     </style>

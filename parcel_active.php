@@ -6,20 +6,21 @@ if(!isset($_SESSION['uid'])){
     header('location: login.php');
     exit();
 }else {
-    if (isset($_GET['id']) && isset($_GET['status'])){
+    if (isset($_GET['id']) && isset($_GET['state'])){
         $id= $_GET['id'];
-        $status = $_GET['status'];
+        $status = $_GET['state'];
+        var_dump($status);
         if ($status ==="cancel"){
-            $stmt = $conn->prepare("DELETE FROM `gas` WHERE id = :id");
+            $stmt = $conn->prepare("DELETE FROM `parcel` WHERE id = :id");
         }else{
-            $stmt = $conn->prepare("UPDATE `gas` SET `status`=:status WHERE id = :id");
+            $stmt = $conn->prepare("UPDATE `parcel` SET `state`=:state WHERE id = :id");
         }
-        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':state', $status);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         ?>
         <script type="text/javascript">
-            window.location.href="gas.php";
+            window.location.href="parcel_active.php";
         </script>
         <?php
     }
@@ -33,40 +34,37 @@ if(!isset($_SESSION['uid'])){
     <table>
         <tr >
             <th>رقم الطلب</th>
-            <th>الكمية</th>
-            <th>نوع الطلب</th>
-            <th>الموقع</th>
-            <th>نوع الخدمة</th>
-            <th>تاريخ الطلب</th>
-            <th>العملاء</th>
+            <th>نوع الطارود</th>
+            <th>وقت الذهاب</th>
+            <th>العميل </th>
             <th>حالة الطلب </th>
-            <th>التحكم</th>
+            <th>التكلفة </th>
+            <th>التفاصيل </th>
+            <th>التحكم </th>
         </tr>
         <?php
         if (!isset($filteredData) || empty($filteredData)){
             $sessionID = $_SESSION['uid'];
-            echo $sessionID;
-            $stmt = $conn->prepare("SELECT g.*, b.* FROM gas g INNER JOIN beneficiary b ON g.beneficiary_id = b.ID_Number WHERE g.delivery_agent_id = $sessionID");
+            $stmt = $conn->prepare("SELECT g.*, b.* FROM parcel g INNER JOIN beneficiary b ON g.beneficiary_id = b.ID_Number WHERE g.delivery_agent_id = $sessionID");
             $stmt->execute();
             $gasolines = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if ($gasolines) {
                 foreach ($gasolines as $gasoline) { ?>
                     <tr>
-                        <td><?php echo $gasoline['Order_Namber']?></td>
-                        <td><?php echo $gasoline['Quantity']?></td>
-                        <td><?php echo $gasoline['type_sevices']?></td>
-                        <td><?php echo $gasoline['location']?></td>
-                        <td><?php echo $gasoline['packaging'] === "0" ? "تعبئة" : "جديد"?></td>
+                        <td><?php echo $gasoline['Track_Number']?></td>
+                        <td><?php echo $gasoline['Parcel_Type']?></td>
                         <td><?php
                             $orderDate = date('Y-m-d', strtotime($gasoline['Order_Date']));
                             $orderTime = date('H:i', strtotime($gasoline['Order_Time']));
                             echo $orderDate ." ".$orderTime;
                             ?></td>
                         <td><?php echo $gasoline['Fname']?></td>
-                        <td><?php echo $gasoline['status']?></td>
+                        <td><?php echo $gasoline['state']?></td>
+                        <td><?php echo $gasoline['Cost']?></td>
+                        <td><?php echo $gasoline['Select_Details']?></td>
                         <td>
                             <?php
-                            $status = $gasoline['status'];
+                            $status = $gasoline['state'];
                             $icon_class = "";
                             $icon_color = "";
                             switch ($status) {
@@ -89,19 +87,19 @@ if(!isset($_SESSION['uid'])){
                                     $icon_color = "text-muted";
                                     break;
                             }
-                            if ($gasoline['status'] === "pending"){ ?>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=confirmed" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger "></i></a>
+                            if ($gasoline['state'] === "pending"){ ?>
+                                <a href="parcel_active.php?id=<?=$gasoline['id']?>&state=confirmed" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
+                                <a href="parcel_active.php?id=<?=$gasoline['id']?>&state=cancel" class="edit-btn"><i class="fas fa-trash text-danger "></i></a>
                             <?php  }
 
-                            if ($gasoline['status'] === "confirmed"){ ?>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=processing" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
+                            if ($gasoline['state'] === "confirmed"){ ?>
+                                <a href="parcel_active.php?id=<?=$gasoline['id']?>&state=processing" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
+                                <a href="parcel_active.php?id=<?=$gasoline['id']?>&state=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
                             <?php  }
 
-                            if ($gasoline['status'] === "processing"){ ?>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=delivered" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
+                            if ($gasoline['state'] === "processing"){ ?>
+                                <a href="parcel_active.php?id=<?=$gasoline['id']?>&state=delivered" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
+                                <a href="parcel_active.php?id=<?=$gasoline['id']?>&state=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
                             <?php  }
                             ?>
                         </td>

@@ -117,7 +117,7 @@
             <main >
             <div class="container-1">
                 <div class="form-container">
-                    <form class="form-group1" action="gasolin1.php">
+                    <form class="form-group1" action="gas.php">
                         <div class="text-container">
                             <div class="text-box">
                                 <p align="justify" class="mb-4" style="color:black; font-size: 24px; direction: rtl;">

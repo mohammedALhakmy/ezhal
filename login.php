@@ -1,46 +1,112 @@
-<?php
-include 'master.php';
-if(isset($_SESSION['uid'])){
-    header('Location: services.php');  }
-?>
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <form class="shadow w-450 p-3" action="cod6e.php" method="post">
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style1.css">
+    <title>Login Page</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <div class="container" id="container">
+        <?php if(isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger" role="alert">
+            <?php echo $_SESSION['error']; ?>
+        </div>
+        <?php unset($_SESSION['error']); endif; ?>
+
+        <div class="form-container sign-up">
+            <?php if(isset($_GET['error'])){ ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $_GET['error']; ?>
+            </div>
+            <?php } ?>
+            <form class="shadow w-450 p-3" action="cod6e.php" method="post">
+                <h1>إنشاء حساب</h1>
+                <span>أو استخدم بريدك الالكتروني للتسجيل</span>
+                <input type="text" name="Fname" placeholder="الإسم">
+                <input type="email" name="Email" placeholder="البريد الالكتروني">
+                <input type="password" name="password" placeholder="كلمة المرور">
+                <div class="form-control">
+                    <label for="">نوع تسجيل الدخول</label>
+                    <select name="type" id="type">
+                        <option value="1">المستفيد</option>
+                        <option value="2">موظف توصيل</option>
+                    </select>
+                </div>
+                <div class="form-control mt-3" id="delivery-options" style="display: none;">
+                    <div class="form-control">
+                        <label for="">خيارات موظف التوصيل</label>
+                        <select class="form-select" name="delivery_option" id="delivery_option">
+                            <option selected disabled>---</option>
+                            <option value="1">مندوب لدى بريد إزهل</option>
+                            <option value="2">مندوب الإنتقال بين المدن</option>
+                            <option value="3">مندوب سائق خاص</option>
+                            <option value="4">مندوب بنزين</option>
+                            <option value="5">مندوب غاز</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" name="cod6e" class="btn btn-primary">التسجيل</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
             <?php if(isset($_SESSION['error'])): ?>
                 <div class="alert alert-danger" role="alert">
                     <?php echo $_SESSION['error']; ?>
                 </div>
                 <?php unset($_SESSION['error']); endif; ?>
 
-            <?php if(isset($_SESSION['errors'])): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?php echo $_SESSION['errors']; ?>
+            <form action="cod6e.php" method="post">
+                <h1>تسجيل الدخول</h1>
+                <span>أو إستخدام بريدك الإلكتروني</span>
+                <input type="email" name="Email" placeholder="البريد الإلكتروني">
+                <input type="password" name="password" placeholder="كلمة المرور">
+                <div class="form-control">
+                    <label for="">نوع تسجيل الدخول</label>
+                    <select name="type" id="type">
+                        <option value="1">المستفيد</option>
+                        <option value="2">موظف توصيل</option>
+                    </select>
                 </div>
-                <?php unset($_SESSION['errors']); endif; ?>
-            <h4 class="display-4  fs-1">تسجيل الدخول</h4><br>
-            <div class="form-control">
-                <label for="">نوع تسجيل الدخول</label>
-                <select name="type" id="type">
-                    <option value="1">المستفيد</option>
-                    <option value="2">موظف توصيل</option>
-                </select>
+                <a href="#">هل نسيت كلمة المرور؟</a>
+                <button type="submit" name="submit" class="btn btn-primary">تسجيل الدخول</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>أهلا بعودتك</h1>
+                    <p>أدخل بياناتك لتتمكن من إستخدام كافة ميزات موقنا</p>
+                    <button class="hidden" id="login">تسجيل الدخول</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>مرحبا بك</h1>
+                    <p>سجل بياناتك لتتمكن من إستخدام كافة ميزات موقنا</p>
+                    <button class="hidden" id="register">التسجيل</button>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label">ايميل المستخدم</label>
-                <input type="text" class="form-control" name="Email" value="<?php echo isset($_POST['Email']) ? $_POST['Email'] : ''; ?>">
-            </div>
-
-
-            <div class="mb-3">
-                <label class="form-label">كلمة المرور</label>
-                <input type="password" class="form-control" name="password">
-            </div>
-
-            <input type="submit" name="submit" class="btn btn-primary" value="دخول"/>
-            <a href="regist.php" class="link-secondary">انشاء حساب</a>
-        </form>
+        </div>
     </div>
-<?php
-include 'include/footer.php';
-include 'include/script.php';
-?>
+
+    <script>
+        document.getElementById('type').addEventListener('change', function() {
+            var type = this.value;
+            var deliveryOptions = document.getElementById('delivery-options');
+
+            if (type == 2) {
+                deliveryOptions.style.display = 'block';
+            } else {
+                deliveryOptions.style.display = 'none';
+            }
+        });
+    </script>
+    <script src="js/script1.js"></script>
+</body>
+
+</html>

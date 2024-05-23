@@ -1,5 +1,10 @@
 <?php
+session_start();
 include "db_conn.php";
+if(!isset($_SESSION['uid']) && !isset($_SESSION['uname'])){
+    header('location: login.php');
+    exit();
+}else {
 $stmt = $conn->prepare("SELECT * FROM `sevices`");
 $stmt->execute();
 $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -26,6 +31,7 @@ foreach ($services as $service) { ?>
 ?>
     </div>
         <?php
+}
 }
 ?>
 

@@ -299,42 +299,42 @@
 
 <?php
 
-$con = mysqli_connect("localhost","root","","ezhal_db");
+//$con = mysqli_connect("localhost","root","","ezhal_db");
+//
+//if (!$con)
+//{
+//    echo "Error: Unable to connect to MySQL." . PHP_EOL;
+//    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
+//    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
+//    exit;
+//}
 
-if (!$con)
-{
-    echo "Error: Unable to connect to MySQL." . PHP_EOL;
-    echo "Debugging errno: " . mysqli_connect_errno() . PHP_EOL;
-    echo "Debugging error: " . mysqli_connect_error() . PHP_EOL;
-    exit;
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $location = mysqli_real_escape_string($con, $_POST["location"]);
-    $target_location = mysqli_real_escape_string($con, $_POST["target-location"]);
-    $start_date = mysqli_real_escape_string($con, $_POST["start-date"]);
-    $start_time = mysqli_real_escape_string($con, $_POST["start-time"]);
-
-    $sql = "INSERT INTO driver_requests (location, target_location, start_date, start_time) 
-    VALUES ('$location', '$target_location', '$start_date', '$start_time')";
-
-    if (mysqli_query($con, $sql)) {
-        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>تم إرسال الطلب بنجاح!</strong> سيتم الإتصال بك قريبًا.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>';
-
-    } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($con);
-    }
-
-    mysqli_close($con);
-}
+//if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//    $location = mysqli_real_escape_string($con, $_POST["location"]);
+//    $target_location = mysqli_real_escape_string($con, $_POST["target-location"]);
+//    $start_date = mysqli_real_escape_string($con, $_POST["start-date"]);
+//    $start_time = mysqli_real_escape_string($con, $_POST["start-time"]);
+//
+//    $sql = "INSERT INTO driver_requests (location, target_location, start_date, start_time)
+//    VALUES ('$location', '$target_location', '$start_date', '$start_time')";
+//
+//    if (mysqli_query($con, $sql)) {
+//        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+//        <strong>تم إرسال الطلب بنجاح!</strong> سيتم الإتصال بك قريبًا.
+//        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+//          <span aria-hidden="true">&times;</span>
+//        </button>
+//      </div>';
+//
+//    } else {
+//        echo "Error: " . $sql . "<br>" . mysqli_error($con);
+//    }
+//
+//    mysqli_close($con);
+//}
 ?>
 <?php
-include('master.php');
+//include('master.php');
 
 ?>
 <div class="container-rlw">

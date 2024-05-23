@@ -1,11 +1,10 @@
 <?php
-include './db/db_connect.php';
-
-if(isset($_GET['type']) && $_GET['type'] == 'go_and_back'){
-    $query = mysqli_query($conn,"select * from trips where date_back != ''");
-} else {
-    $query = mysqli_query($conn,"select * from trips where date_back =''");
-}
+//include './db/db_connect.php';
+//if(isset($_GET['type']) && $_GET['type'] == 'go_and_back'){
+//    $query = mysqli_query($conn,"select * from trips where date_back != ''");
+//} else {
+//    $query = mysqli_query($conn,"select * from trips where date_back =''");
+//}
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +34,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'go_and_back'){
 
 <body>
 <?php
-include('master.php');
+//include('master.php');
 ?>
 
     <section class="trips py-5" style="margin-top: 30px; display: flex; flex-direction: column; align-items: center;">
@@ -49,28 +48,37 @@ include('master.php');
         <div class="container-list">
             <div id="early" class="details">
                 <?php
-                if (mysqli_num_rows($query) > 0) {
-                    foreach ($query as $item) {
+//                if (mysqli_num_rows($query) > 0) {
+//                    foreach ($query as $item) {
                 ?>
                         <form class="options" onsubmit="return validateForm()" action="./detail of the trip page.php" method="post">
                             <div class="row">
-                                <input type="hidden" name="trip_id" value="<?php echo $item['id']?>">
+<!--                                <input type="hidden" name="trip_id" value="--><?php //echo $item['id']?><!--">-->
+                                <input type="hidden" name="trip_id" value="">
                                 <ul class="list">
-                                    <li style="display: flex; align-items: center;"><p style="font-size: 18px !important; margin: 0; color: <?php echo $item['date_back'] == '' ? 'blue' : 'green'; ?>;"> نوع الرحلة : <?php echo $item['date_back'] == '' ? 'ذهاب' : 'ذهاب و اياب'; ?></p></li>
-                                    <li><p style="font-size: 18px !important;"> ساعة الإنطلاق :<?php echo $item['time_to_leave']?></p></li>
+                                    <li style="display: flex; align-items: center;"><p style="font-size: 18px !important; margin: 0; color:
+<!--                                        --><?php //echo $item['date_back'] == '' ? 'blue' : 'green'; ?>/*;">*/
+                                            نوع الرحلة :
+<!--                                            --><?php //echo $item['date_back'] == '' ? 'ذهاب' : 'ذهاب و اياب'; ?>
+                                        </p></li>
+                                    <li><p style="font-size: 18px !important;"> ساعة الإنطلاق :
+<!--                                            --><?php //echo $item['time_to_leave']?>
+                                        </p></li>
                                     <li><p style="font-size: 18px !important;">المدة الزمنية : 4 ساعات</p></li>
-                                    <li><p style="font-size: 18px !important;">السعر:<?php echo $item['price_of_seat'];?></p></li>
+                                    <li><p style="font-size: 18px !important;">السعر:
+<!--                                            --><?php //echo $item['price_of_seat'];?>
+                                        </p></li>
                                 </ul>
                                 <button type="submit" style="width: auto;" class="btn-theme"> ارسال طلب</button>
                             </div>
                         </form>
                 <?php
-                    }
-                } else {
+//                    }
+//                } else {
                 ?>
                     <p>No trips found.</p>
                 <?php
-                }
+//                }
                 ?>
             </div>
         </div>

@@ -375,28 +375,6 @@
         left: 0;
     }
 }
-
-.container-1 {
-    text-align: center;
-    width: 80%;
-    margin: 10%;
-    height: 70%;
-    color: white;
-    margin-top: 3%;
-    margin-bottom: 5%;
-    display: flex;
-    position: relative;
-    /* Use flexbox for layout */
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-    /* Align items to the start of the container */
-    /* Distribute space between form and image */
-    padding: 20px;
-    background-color: #ffffff;
-    
-}
 .content{
     width: 100%;
 }
@@ -430,7 +408,7 @@
 }
 
 .image-container img {
-    max-width: 100%;
+    max-width: 85%;
     height: auto;
     border-radius: 10px;
     
@@ -441,7 +419,7 @@
     direction: rtl;
     text-align: right;
     border-radius: 10px;
-    padding: 10px;
+    /*padding: 10px;*/
     box-shadow: 0 10px 20px  rgba(170, 170, 170, 0.7);
 }
 .form-container h4{

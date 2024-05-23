@@ -161,39 +161,39 @@ session_start();
     </nav>
 
     <?php
-    function displayServiceName($name)
-    {
-        switch ($name) {
-            case 'Gaz':
-                return 'غاز';
-            case 'Gasoline':
-                return 'بنزين';
-            default:
-                return '';
-        }
-    }
+//    function displayServiceName($name)
+//    {
+//        switch ($name) {
+//            case 'Gaz':
+//                return 'غاز';
+//            case 'Gasoline':
+//                return 'بنزين';
+//            default:
+//                return '';
+//        }
+//    }
 
-    function displayOrderStatus($status)
-    {
-        switch ($status) {
-            case 'Pending':
-                return 'قيد الانتظار';
-            case 'Accepted':
-                return 'مقبولة';
-            case 'Rejected':
-                return 'مرفوضة';
-            default:
-                return '';
-        }
-    }
+//    function displayOrderStatus($status)
+//    {
+//        switch ($status) {
+//            case 'Pending':
+//                return 'قيد الانتظار';
+//            case 'Accepted':
+//                return 'مقبولة';
+//            case 'Rejected':
+//                return 'مرفوضة';
+//            default:
+//                return '';
+//        }
+//    }
 
-    include 'php/connection_db.php';
+    //include 'php/connection_db.php';
 
     // Fetch data from the "orders" table
-    $result = $conn->query('SELECT * FROM orders  where user_id = ' . $_SESSION['id'] . ' and order_status = "Pending"');
+    //$result = $conn->query('SELECT * FROM orders  where user_id = ' . $_SESSION['id'] . ' and order_status = "Pending"');
 
     // Check if any rows were returned
-    if ($result->num_rows > 0) {
+//    if ($result->num_rows > 0) {
         // Start building the HTML table
         echo '<table>
             <tr>
@@ -207,34 +207,34 @@ session_start();
             </tr>';
 
         // Loop through each row of data and display it in the table
-        while ($row = $result->fetch_assoc()) {
-            $orderStatus = displayOrderStatus($row['order_status']);
-            $service = displayServiceName($row['requested_service']);
-            echo '<tr>
-                <td>' . $row['order_number'] . '</td>
-                <td>' . $service . '</td>
-                <td>' . $row['order_date'] . '</td>
-                <td>' . $row['category_count'] . '</td>
-                <td>' . $row['current_total'] . '</td>
-                <td>' . $orderStatus . '</td>
-                <td>
-                    <a href="update_order.php?id=' . $row['id'] . '" class="edit-btn" title="تعديل" target="_blank"><i class="fas fa-edit"></i></a>
-                    <a class="delete-btn" onclick="deleteOrder(' . $row['id'] . ')" title="حذف"><i class="fas fa-trash"></i></a>
-                    
-                </td>
-    
-               
-            </tr>';
-        }
+//        while ($row = $result->fetch_assoc()) {
+//            $orderStatus = displayOrderStatus($row['order_status']);
+//            $service = displayServiceName($row['requested_service']);
+//            echo '<tr>
+//                <td>' . $row['order_number'] . '</td>
+//                <td>' . $service . '</td>
+//                <td>' . $row['order_date'] . '</td>
+//                <td>' . $row['category_count'] . '</td>
+//                <td>' . $row['current_total'] . '</td>
+//                <td>' . $orderStatus . '</td>
+//                <td>
+//                    <a href="update_order.php?id=' . $row['id'] . '" class="edit-btn" title="تعديل" target="_blank"><i class="fas fa-edit"></i></a>
+//                    <a class="delete-btn" onclick="deleteOrder(' . $row['id'] . ')" title="حذف"><i class="fas fa-trash"></i></a>
+//
+//                </td>
+//
+//
+//            </tr>';
+//        }
 
         // Close the HTML table
         echo '</table>';
-    } else {
+//    } else {
         echo 'No data found in the "orders" table.';
-    }
+//    }
 
     // Close the connection
-    $conn->close();
+//    $conn->close();
     ?>
  <script>
         function deleteOrder(orderId) {

@@ -4,6 +4,7 @@ include  "db_conn.php";
 if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['submit'])){
     $Email = strtolower($_POST['Email']);
     $type = $_POST['type'];
+    var_dump($type);
     $password = $_POST['password'];
     try {
         if ($type == 1) {
@@ -17,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['submit'])){
                     $_SESSION['uname'] =  $beneficiary['Fname'];
                     $_SESSION['uemail'] = $beneficiary['Email'];
                     $_SESSION['bene_dashboard'] = $beneficiary['ID_Number'];
+                    $_SESSION['bene_id']   =    $beneficiary['ID_Number'];
                     header('location:bene_dashboard.php');
                     exit();
                 } else {
@@ -37,8 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['submit'])){
             if ($beneficiary) {
                 if(password_verify($password,$beneficiary['Password'])){
                     $_SESSION['uid']   =    $beneficiary['ID_Number'];
+                    $_SESSION['delivery_id']   =    $beneficiary['ID_Number'];
                     $_SESSION['uname'] =  $beneficiary['Fname'];
                     $_SESSION['uemail']= $beneficiary['Email'];
+                    $_SESSION['Availability'] = $beneficiary['Availability'];
                     $_SESSION['delivery_dashboard']   =    $beneficiary['ID_Number'];
                     header('location: delivery_dashboard.php');
                     exit();
@@ -95,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['checkout'])){
     $Quantity = $_POST['Quantity'];
     $price = $_POST['price']*$Quantity;
     $VAT = $price * 0.15;
+    var_dump($VAT);
     $totalPrice = $price + $VAT;
     $location = $_POST['location'];
     $delivery_agent_id = $_POST['delivery_agent_id'];
@@ -117,6 +122,82 @@ if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['checkout'])){
         'Order_Time'=>$Order_Time,'price'=>$totalPrice,'VAT'=>$VAT,'delivery_agent_id'=>$delivery_agent_id,'beneficiary_id'=>$sessionID,'type_s'=>$type,'status'=>$status]);
     header('location:bene_dashboard.php');
     exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['BookDriver'])){
+    $Order_Namber = rand(10000,100000);
+    $location = $_POST['location'];
+    $target_location = $_POST['target_location'];
+    $start_date = $_POST['start_date'];
+    $delivery_agent_id = $_POST['delivery_agent_id'];
+    $type = $_POST['type'];
+    $start_time = $_POST['start_time'];
+    $sessionID = $_SESSION['uid'];
+    $status = "pending";
+
+    $stmt = $conn->prepare("INSERT INTO `book_driver`(`Order_Namber`, `location`, `target_location`, `start_date`, `start_time`, `beneficiary_id`,
+                          `delivery_agent_id`, `type_b`, `status`) VALUES (:Order_Namber,:location,:target_location,:start_date,:start_time,:beneficiary_id,
+                                                                           :delivery_agent_id,:type_b,:status)");
+    $stmt->execute(['Order_Namber' => $Order_Namber, 'location' => $location, 'target_location' => $target_location, 'start_date' => $start_date,'start_time'=>$start_time,
+        'beneficiary_id'=>$sessionID,'delivery_agent_id'=>$delivery_agent_id,'type_b' =>$type,'status'=>$status]);
+    header('location:bene_dashboard.php');
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['gas'])){
+    $Order_Namber = rand(10000,100000);
+    $Quantity = $_POST['Quantity'];
+    $type_sevices = $_POST['type_sevices'];
+    $location = $_POST['location'];
+    $packaging = $_POST['packaging'];
+    $start_date =  date("Y-m-d");
+    $start_time = date("H:m");
+    $delivery_agent_id = $_POST['delivery_agent_id'];
+    $sessionID = $_SESSION['uid'];
+    $type = $_POST['type'];
+    $status = "pending";
+    $stmt = $conn->prepare("INSERT INTO `gas`(`Order_Namber`, `Quantity`, `type_sevices`, `location`, `packaging`, `Order_Date`, `Order_Time`, `delivery_agent_id`,
+                  `beneficiary_id`, `type_s`, `status`) VALUES (:Order_Namber,:Quantity,:type_sevices,:location,:packaging,:Order_Date,
+                                                                           :Order_Time,:delivery_agent_id,:beneficiary_id,:type_s,:status)");
+    $stmt->execute([
+        ':Order_Namber' => $Order_Namber,
+        ':Quantity' => $Quantity,
+        ':type_sevices' => $type_sevices,
+        ':location' => $location,
+        ':packaging' => $packaging,
+        ':Order_Date' => $start_date,
+        ':Order_Time' => $start_time,
+        ':delivery_agent_id' => $delivery_agent_id,
+        ':beneficiary_id' => $sessionID,
+        ':type_s' => $type,
+        ':status' => $status
+    ]);
+
+    header('location:bene_dashboard.php');
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['parcel'])){
+    $Parcel_Type = $_POST['Parcel_Type'];
+    $state = "pending";
+    $Track_Number = rand(10000,100000);
+    $Cost = $_POST['Cost'];
+    $Select_Details = $_POST['Select_Details'];
+    $delivery_agent_id = $_POST['delivery_agent_id'];
+    $sessionID = $_SESSION['uid'];
+    $Order_Date =  date("Y-m-d");
+    $Order_Time = date("H:m");
+    $type_s = $_POST['type'];
+    try {
+            $stmt = $conn->prepare("INSERT INTO `parcel`(`Parcel_Type`,`state`,`Track_Number`, `Cost`,`Select_Details`,`delivery_agent_id`,`beneficiary_id`,`Order_Date`,`Order_Time`,`type_s`)
+                                VALUES (:Parcel_Type, :state, :Track_Number, :Cost,:Select_Details,:delivery_agent_id,:beneficiary_id,:Order_Date,:Order_Time,:type_s)");
+    $stmt->execute(['Parcel_Type' => $Parcel_Type, 'state' => $state, 'Track_Number' => $Track_Number, 'Cost' => $Cost,'Select_Details'=>$Select_Details,'delivery_agent_id'=>$delivery_agent_id,
+        'beneficiary_id' =>$sessionID,'Order_Date'=>$Order_Date,'Order_Time'=>$Order_Time,'type_s'=>$type_s]);
+            header('location: bene_dashboard.php');
+
+    } catch(PDOException $e) {
+        echo "فشل التحميل: " . $e->getMessage();
+    }
 }
 
 

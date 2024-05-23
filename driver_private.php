@@ -10,16 +10,16 @@ if(!isset($_SESSION['uid'])){
         $id= $_GET['id'];
         $status = $_GET['status'];
         if ($status ==="cancel"){
-            $stmt = $conn->prepare("DELETE FROM `gas` WHERE id = :id");
+            $stmt = $conn->prepare("DELETE FROM `book_driver` WHERE id = :id");
         }else{
-            $stmt = $conn->prepare("UPDATE `gas` SET `status`=:status WHERE id = :id");
+            $stmt = $conn->prepare("UPDATE `book_driver` SET `status`=:status WHERE id = :id");
         }
         $stmt->bindParam(':status', $status);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         ?>
         <script type="text/javascript">
-            window.location.href="gas.php";
+            window.location.href="driver_private.php";
         </script>
         <?php
     }
@@ -33,33 +33,28 @@ if(!isset($_SESSION['uid'])){
     <table>
         <tr >
             <th>رقم الطلب</th>
-            <th>الكمية</th>
-            <th>نوع الطلب</th>
-            <th>الموقع</th>
-            <th>نوع الخدمة</th>
-            <th>تاريخ الطلب</th>
-            <th>العملاء</th>
+            <th>من الموقع</th>
+            <th>الى الموقع</th>
+            <th>وقت الذهاب</th>
+            <th>العميل </th>
             <th>حالة الطلب </th>
             <th>التحكم</th>
         </tr>
         <?php
         if (!isset($filteredData) || empty($filteredData)){
             $sessionID = $_SESSION['uid'];
-            echo $sessionID;
-            $stmt = $conn->prepare("SELECT g.*, b.* FROM gas g INNER JOIN beneficiary b ON g.beneficiary_id = b.ID_Number WHERE g.delivery_agent_id = $sessionID");
+            $stmt = $conn->prepare("SELECT g.*, b.* FROM book_driver g INNER JOIN beneficiary b ON g.beneficiary_id = b.ID_Number WHERE g.delivery_agent_id = $sessionID");
             $stmt->execute();
             $gasolines = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if ($gasolines) {
                 foreach ($gasolines as $gasoline) { ?>
                     <tr>
                         <td><?php echo $gasoline['Order_Namber']?></td>
-                        <td><?php echo $gasoline['Quantity']?></td>
-                        <td><?php echo $gasoline['type_sevices']?></td>
                         <td><?php echo $gasoline['location']?></td>
-                        <td><?php echo $gasoline['packaging'] === "0" ? "تعبئة" : "جديد"?></td>
+                        <td><?php echo $gasoline['target_location']?></td>
                         <td><?php
-                            $orderDate = date('Y-m-d', strtotime($gasoline['Order_Date']));
-                            $orderTime = date('H:i', strtotime($gasoline['Order_Time']));
+                            $orderDate = date('Y-m-d', strtotime($gasoline['start_date']));
+                            $orderTime = date('H:i', strtotime($gasoline['start_time']));
                             echo $orderDate ." ".$orderTime;
                             ?></td>
                         <td><?php echo $gasoline['Fname']?></td>
@@ -90,18 +85,18 @@ if(!isset($_SESSION['uid'])){
                                     break;
                             }
                             if ($gasoline['status'] === "pending"){ ?>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=confirmed" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger "></i></a>
+                                <a href="driver_private.php?id=<?=$gasoline['id']?>&status=confirmed" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
+                                <a href="driver_private.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger "></i></a>
                             <?php  }
 
                             if ($gasoline['status'] === "confirmed"){ ?>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=processing" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
+                                <a href="driver_private.php?id=<?=$gasoline['id']?>&status=processing" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
+                                <a href="driver_private.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
                             <?php  }
 
                             if ($gasoline['status'] === "processing"){ ?>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=delivered" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
-                                <a href="gas.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
+                                <a href="driver_private.php?id=<?=$gasoline['id']?>&status=delivered" class="edit-btn"><i class="<?=$icon_class?> <?=$icon_color?>"></i></a>
+                                <a href="driver_private.php?id=<?=$gasoline['id']?>&status=cancel" class="edit-btn"><i class="fas fa-trash text-danger"></i></a>
                             <?php  }
                             ?>
                         </td>
