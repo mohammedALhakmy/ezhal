@@ -24,6 +24,37 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="./round-trip-page_files/css2" rel="stylesheet">
+    <link href="./round-trip-page_files/all.min.css" rel="stylesheet">
+    <link href="./round-trip-page_files/bootstrap-icons.css" rel="stylesheet">
+    <link href="./round-trip-page_files/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./round-trip-page_files/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
+    <link href="./Add the trip_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./Add the trip_files/all.min.css">
+    <link href="./Add the trip_files/bootstrap-icons.css" rel="stylesheet">
+    <link href="./Add the trip_files/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./Add the trip_files/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
+    <link href="./map_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./map_files/all.min.css">
+    <link href="./map_files/bootstrap-icons.css" rel="stylesheet">
+    <link href="./map_files/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./detail of the trip page_files/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./Send Request Page_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./Send Request Page_files/all.min.css">
+    <link href="./Send Request Page_files/bootstrap-icons.css" rel="stylesheet">
+
     <style>
 
         .container1 {
@@ -261,5 +292,19 @@
             height: auto;
             border-radius: 10px;
 
+        }
+
+        #ppup {
+            width: 300px;
+            margin: 0 auto -40px;
+            background: #06657a;
+            opacity: 1;
+            transform: translateY(-40px);
+            transition: all 0.4s;
+        }
+
+        .active-ppup {
+            opacity: 1 !important;
+            transform: translateY(20px) !important;
         }
     </style>

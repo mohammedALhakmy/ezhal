@@ -1,38 +1,46 @@
+
 <?php
-session_start();
-if(!isset($_SESSION['uid'])){
-    header('location:login.php');
-    exit();
-}else{
-include "db_conn.php";
-if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['Payment'])) {
-    $trip_id = $_POST['trip_id'];
-    $u_ciy = $_POST['u_ciy'];
-    $u_hay = $_POST['u_hay'];
-    $u_streeat = $_POST['u_streeat'];
-    $u_address_short = $_POST['u_address_short'];
-    $stmt = $conn->prepare("INSERT INTO `your_location`( `u_lovation`, `u_ciy`, `u_hay`, `u_streeat`, `u_address_short`, `trip_id`)
-                                VALUES (:u_lovation,:u_ciy,:u_hay, :u_streeat, :u_address_short, :trip_id)");
-    $stmt->execute(['u_lovation' => $u_address_short, 'u_ciy' => $u_ciy, 'u_hay' => $u_hay, 'u_streeat' => $u_streeat, 'u_address_short' => $u_address_short, 'trip_id' => $trip_id]);
-}
-    if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['paymentFinish'])) {
-    $full_name   = $_POST['Fname'];
-    $name_in_card = $_POST['card_name'];
-    $email = $_POST['email'];
-    $address = $_POST['address'];
-    $city = $_POST['city'];
-        $streeat = $_POST['streeat'];
-    $zip = $_POST['add_parid'];
-    $cvv = $_POST['cvv'];
-    $cardnumber = $_POST['card_number'];
-    $expyear = $_POST['year'];
-    $expmonth = $_POST['month'];
-        $stmt = $conn->prepare("INSERT INTO `payment_city`( `Fname`, `email`, `address`, `city`, `streeat`, `add_parid`, `year`, `cvv`, `month`, `card_number`, `card_name`)
-                                VALUES (:Fname,:email,:address, :city, :streeat, :add_parid,:year,:cvv,:month,:card_number,:card_name)");
-        $stmt->execute(['Fname' => $full_name, 'email' => $email, 'address' => $address, 'city' => $city, 'streeat' => $streeat,'add_parid'=>$zip,'year'=>$expyear,
-            'cvv'=>$cvv,'month'=>$expmonth,'card_number'=>$cardnumber,'card_name'=>$name_in_card]);
-           header('location: bene_dashboard.php');
-}
+
+
+//
+//include './system/db.php';
+//
+//
+//
+//
+//
+//
+//
+//if(isset($_POST['payment'])){
+//$full_name   = $_POST['firstname'];
+//$name_in_card = $_POST['cardname'];
+//$email = $_POST['email'];
+//$address = $_POST['address'];
+//$city = $_POST['city'];
+//$state = $_POST['state'];
+//$zip = $_POST['zip'];
+//$cvv = $_POST['cvv'];
+//$cardnumber = $_POST['cardnumber'];
+//$expyear = $_POST['expyear'];
+//$expmonth = $_POST['expmonth'];
+//$trip_id = $_POST['trip_id'];
+//$query = "Insert into payment(trip_id,full_name,name_in_card,email,address,city,state,zip,cvv,cardnumber,expyear,expmonth)
+//Values('$trip_id','$full_name','$name_in_card','$email','$address','$city','$state','$zip','$cvv','$cardnumber','$expyear','$expmonth')";
+//
+//$resault = mysqli_query($con,$query);
+//
+//
+//$trip_id = $_POST['trip_id'];
+//
+//
+//header("location:Payment.php?message=active-ppup");
+//
+//
+//}
+//
+//
+
+
 ?>
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -61,13 +69,13 @@ body {
 }
 
 .row {
-  display: -ms-flexbox;
+  display: -ms-flexbox; 
   display:flex;
-  -ms-flex-wrap: wrap;
+  -ms-flex-wrap: wrap; 
   flex-wrap: wrap;
   margin: 16px -16px;
-
-
+  
+  
 }
 
 .col-20 {
@@ -166,24 +174,24 @@ span.price {
 </style>
 </head>
 <body>
-
-
-<h2>صفحة الدفع</h2>
-<div  id="ppup"class="<?php if(isset($_GET['message'])){
+  <div id="ppup"class="<?php if(isset($_GET['message'])){
     echo $_GET['message'];
   }?>" >
     <h2 style="color: #fff; text-align: center;">تم الدفع</h2>
   </div>
+
+<h2>صفحة الدفع</h2>
+
 <div class="row">
   <div class="col-75">
     <div class="container">
-      <form action="Payment.php" method="post">
+      <form action="" method="post">      
         <div class="row">
           <div class="col-50">
             <h3>العنوان</h3>
-            <input type="hidden" name="trip_id" value="1">
+            <input type="hidden" name="trip_id" value="<?php echo $trip_id?>">
             <label for="fname"><i class="fa fa-user"></i>الإسم كامل </label>
-            <input type="text" id="fname" name="Fname" placeholder="الاء السبيعي">
+            <input type="text" id="fname" name="firstname" placeholder="الاء السبيعي">
             <label for="email"><i class="fa fa-envelope"></i> البريد الإلكتروني</label>
             <input type="text" id="email" name="email" placeholder="@gmail.com">
             <label for="adr"><i class="fa fa-address-card-o"></i> العنوان</label>
@@ -194,15 +202,15 @@ span.price {
             <div class="row">
               <div class="col-50">
                 <label for="state">الشارع</label>
-                <input type="text" id="state" name="streeat" placeholder="الشارع">
+                <input type="text" id="state" name="state" placeholder="الشارع">
               </div>
               <div class="col-50">
                 <label for="zip">العنوان البريدي</label>
-                <input type="text" id="zip" name="add_parid" placeholder="10001">
+                <input type="text" id="zip" name="zip" placeholder="10001">
               </div>
             </div>
           </div>
-<div class="col-50" >
+<div class="col-50">
             <h3>طريقة الدفع</h3>
             <label for="fname">معلومات البطاقة</label>
             <div class="icon-container">
@@ -212,16 +220,16 @@ span.price {
               <i class="fa fa-cc-discover" style="color:orange;"></i>
             </div>
             <label for="cname">الإسم الموجود على البطاقة</label>
-            <input type="text" id="cname" name="card_name" placeholder=" الاء السبيعي" onkeyup="english_only()">
+            <input type="text" id="cname" name="cardname" placeholder=" الاء السبيعي" onkeyup="english_only()">
             <p id="msg">&nbsp;</p>
             <label for="ccnum">رقم البطاقة الائتمانية</label>
-            <input type="text" id="ccnum" name="card_number" placeholder="1111-2222-3333-4444">
+            <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
             <label for="expmonth">الشهر</label>
-            <input type="text" id="expmonth" name="month" placeholder="September">
+            <input type="text" id="expmonth" name="expmonth" placeholder="September">
             <div class="row">
               <div class="col-50">
                 <label for="expyear">السنة</label>
-                <input type="text" id="expyear" name="year" placeholder="2024">
+                <input type="text" id="expyear" name="expyear" placeholder="2024">
               </div>
               <div class="col-50">
                 <label for="cvv">CVV</label>
@@ -231,10 +239,10 @@ span.price {
           
         </div>
         <label>
-          <input type="checkbox" checked="checked" name="sameadr"> حفظ العنوان
+          <input type="checkbox" checked="checked" name="sameadr"> حفظ العنوان 
         </label>
         <div class="text-center">
-          <input type="submit"  value="تأكيد الدفع"  name="paymentFinish" class="btn m-auto">
+          <input type="submit"  value="تأكيد الدفع"  name="payment" class="btn m-auto"> 
       </div>
       </form>
     </div>
@@ -269,11 +277,9 @@ if(!((/^[a-zA-Z]+$/.test(cname)) || cname.length ==0)){
 
 }
 </script>
-
+        </script>
 
 
 
 
 </body></html>
-<?php
-}

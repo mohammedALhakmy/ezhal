@@ -36,7 +36,10 @@ if(!isset($_SESSION['uid'])){
             <th>رقم الطلب</th>
             <th>نوع الطارود</th>
             <th>وقت الذهاب</th>
-            <th>العميل </th>
+            <th>المرسل </th>
+            <th>المستلم </th>
+            <th>عنوان المستلم </th>
+            <th>رقم الهاتف </th>
             <th>حالة الطلب </th>
             <th>التكلفة </th>
             <th>التفاصيل </th>
@@ -45,7 +48,10 @@ if(!isset($_SESSION['uid'])){
         <?php
         if (!isset($filteredData) || empty($filteredData)){
             $sessionID = $_SESSION['uid'];
-            $stmt = $conn->prepare("SELECT g.*, b.* FROM parcel g INNER JOIN beneficiary b ON g.beneficiary_id = b.ID_Number WHERE g.delivery_agent_id = $sessionID");
+            $stmt = $conn->prepare("SELECT g.*,f.*,b.* FROM parcel g INNER JOIN beneficiary b ON g.beneficiary_id = b.ID_Number INNER JOIN future_data f  WHERE g.delivery_agent_id = $sessionID");
+//            $stmt = $conn->prepare("SELECT g.*, f.*, b.* AS beneficiary_name, b.`address` AS beneficiary_address FROM parcel g
+//                                        INNER JOIN future_data f ON g.`Track_Number` = f.`ID_Nnmber` INNER JOIN beneficiary b ON g.`beneficiary_id` = b.`ID_Number`
+//                                        WHERE g.`delivery_agent_id` = $sessionID");
             $stmt->execute();
             $gasolines = $stmt->fetchAll(PDO::FETCH_ASSOC);
             if ($gasolines) {
@@ -59,6 +65,9 @@ if(!isset($_SESSION['uid'])){
                             echo $orderDate ." ".$orderTime;
                             ?></td>
                         <td><?php echo $gasoline['Fname']?></td>
+                        <td><?php echo $gasoline['name_futur']?></td>
+                        <td><?php echo $gasoline['address_m']?></td>
+                        <td><?php echo $gasoline['phone']?></td>
                         <td><?php echo $gasoline['state']?></td>
                         <td><?php echo $gasoline['Cost']?></td>
                         <td><?php echo $gasoline['Select_Details']?></td>

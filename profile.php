@@ -1,120 +1,164 @@
 <?php
 session_start();
-
-if (isset($_SESSION['id']) && isset($_SESSION['fname'])) {
-
+ob_start();
+if(!isset($_SESSION['uid']) && isset($_SESSION['delivery_dashboard'])){
+    header('location:login.php');
+    exit();
+}else{
     include "db_conn.php";
-    include 'php/User.php';
-    $user = getUserById($_SESSION['id'], $conn);
-?>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+    include 'master.php';
+    $uid = $_SESSION['uid'];
+    $stmt = $conn->prepare("SELECT * FROM `delivery_agent` WHERE ID_Number = :uid");
+    $stmt->bindParam(':uid', $uid);
+    $stmt->execute();
+    $beneficiary = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($beneficiary) {
+        if ($_SERVER['REQUEST_METHOD'] === "POST"  && isset($_POST['profile_submit'])) {
+            $avatarName=$_FILES['photo']['name'];
+            $avatarSize=$_FILES['photo']['size'];
+            $avatarTmp=$_FILES['photo']['tmp_name'];
+            $avatarType=$_FILES['photo']['type'];
+            $avatarAllowedExtension=array("jpeg","jpg","pdf","png","gif");
+            @ $avatarExtension=strtolower(end(explode('.',$avatarName)));
+            $avatar =rand(0,100000000).'_'.$avatarName;
+            move_uploaded_file($avatarTmp,"img/profile/".$avatar);
+            $Fname = $_POST['Fname'];
+            $Email = $_POST['Email'];
+            $notes = $_POST['notes'];
+            $Availability = $_POST['Availability'];
+            $sessionID = $_SESSION['uid'];
+            $phone = $_POST['phone'];
+            $date_barth = $_POST['date_barth'];
+            $area = $_POST['area'];
+            $ac_tw = $_POST['ac_tw'];
+            $ac_f = $_POST['ac_f'];
+            $ac_li = $_POST['ac_li'];
+            $ac_in = $_POST['ac_in'];
+            $OldPassword = $_POST['OldPassword'];
+            $password = $_POST['password'];
+            $password_confirm = $_POST['password_confirm'];
+            if ($password === $password_confirm) {
+                $PasswordConf =password_hash($_POST['password'],PASSWORD_BCRYPT,["cost"=>6]);
+                $stmt = $conn->prepare("UPDATE `delivery_agent` SET Fname=:Fname, Email=:Email, photo=:photo, notes=:notes,
+                            date_barth=:date_barth, area=:area, phone=:phone, ac_f=:ac_f, ac_tw=:ac_tw, ac_li=:ac_li, ac_in=:ac_in, Password=:Password, 
+                            Availability=:Availability WHERE ID_Number=:ID_Number");
+                $stmt->execute([
+                    'Fname' => $Fname,
+                    'Email' => $Email,
+                    'photo' => $avatar,
+                    'notes' => $notes,
+                    'date_barth' => $date_barth,
+                    'area' => $area,
+                    'phone' => $phone,
+                    'ac_f' => $ac_f,
+                    'ac_tw' => $ac_tw,
+                    'ac_li' => $ac_li,
+                    'ac_in' => $ac_in,
+                    'Password' => $PasswordConf,
+                    'Availability' => $Availability,
+                    'ID_Number' => $sessionID // هنا يجب تحديد الشرط الذي يحدد أي سجل سيتم تحديثه
+                ]);
+                header('location: delivery_dashboard.php');
+            }else{
+                $stmt = $conn->prepare("UPDATE `delivery_agent` SET Fname=:Fname, Email=:Email, photo=:photo, notes=:notes,
+                            date_barth=:date_barth, area=:area, phone=:phone, ac_f=:ac_f, ac_tw=:ac_tw, ac_li=:ac_li, ac_in=:ac_in, 
+                            Availability=:Availability WHERE ID_Number=:ID_Number");
+                $stmt->execute([
+                    'Fname' => $Fname,
+                    'Email' => $Email,
+                    'photo' => $avatar,
+                    'notes' => $notes,
+                    'date_barth' => $date_barth,
+                    'area' => $area,
+                    'phone' => $phone,
+                    'ac_f' => $ac_f,
+                    'ac_tw' => $ac_tw,
+                    'ac_li' => $ac_li,
+                    'ac_in' => $ac_in,
+                    'Availability' => $Availability,
+                    'ID_Number' => $sessionID // هنا يجب تحديد الشرط الذي يحدد أي سجل سيتم تحديثه
+                ]);
+                header('location: delivery_dashboard.php');
+            }
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>الصفحة الشخصية</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/profile edit/style.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
+
         }
+        ?>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+        <link href="./Send Request Page_files/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./Send Request Page_files/style.css">
+        <link rel="stylesheet" href="css/sty5le.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
 
-        .profile-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .profile-card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
-
-        .profile-name {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .btn-edit-profile {
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-
-<body>
-    <?php   include('master.php'); ?>
-<form action="/php/edit_profile.php" method="POST">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <div class="container light-style flex-grow-1 container-p-y">
-        <h4 class="font-weight-bold py-3 mb-4" style="text-align: right; font-family: 'Noto Kufi Arabic', sans-serif;">
-            إعدادات الحساب
-        </h4>
+    <h4 class="font-weight-bold py-3 mb-4" style="text-align: right; font-family: 'Noto Kufi Arabic', sans-serif;">
+        إعدادات الحساب
+    </h4>
 
-        <div class="card overflow-hidden">
+    <div class="card overflow-hidden">
+        <form action="profile.php" method="post" enctype="multipart/form-data">
             <div class="row no-gutters row-bordered row-border-light">
                 <div class="col-md-3 pt-0">
                     <div class="list-group list-group-flush account-settings-links">
                         <a class="list-group-item list-group-item-action active" data-toggle="list"
-                            href="#account-general">عام</a>
+                           href="#account-general">عام</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-change-password">تغيير كلمة المرور </a>
+                           href="#account-change-password">تغيير كلمة المرور </a>
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">نبذة
                             عن المندوب </a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-social-links">حسابات التواصل الإجتماعي</a>
+                           href="#account-social-links">حسابات التواصل الإجتماعي</a>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-notifications">الطلبات</a>
+                           href="#account-notifications">الطلبات</a>
                     </div>
                     <div class="mt-3" style="text-align: center;">
-                        <a href="/edit_profile.php" type="button" class="btn btn-primary"
-                            style="display: inline-block; background-color: #06657a;">حفظ التغيرات</a>
-                        <a href="/index.php" type="button" class="btn btn-default"
-                            style="display: inline-block; margin-left: 5px;">إلغاء</a>
+                        <button type="submit" class="btn btn-primary"
+                                style="display: inline-block; background-color: #06657a;" name="profile_submit">حفظ التغيرات</button>
+                        <button type="button" class="btn btn-default"
+                                style="display: inline-block; margin-left: 5px;">إلغاء</button>
                     </div>
-
-
                 </div>
                 <div class="col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="account-general">
                             <div class="card-body media align-items-center">
-                            <img src="upload/<?= $user['pp'] ?>" class="profile-image img-fluid">
-                                    
-                                <div class="media-body ml-4">
-                                    
-                                   
+                                <img src="img/profile/<?php echo $beneficiary['photo'] ?>" alt="" class="d-block ui-w-80">
+                                <div class="media-body ml-4" style="text-align: end;">
+                                    <label class="btn btn-outline-primary">
+                                        تغيير الصورة الشخصية
+                                        <input type="file" accept="image/*"  name="photo" class="account-settings-fileinput">
+                                    </label> &nbsp;
                                 </div>
                             </div>
                             <hr class="border-light m-0">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label class="form-label">الإسم</label>
-                                    <input type="text" class="form-control" value="<?= $user['fname'] ?>">
+                                    <input type="text" class="form-control" name="Fname" value="<?php echo $beneficiary['Fname']?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">البريد الإلكتروني</label>
-                                    <input type="text" class="form-control mb-1" value="demo@mail.com">
+                                    <input type="text" class="form-control mb-1" name="Email" value="<?php echo $beneficiary['Email']?>">
 
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">مسار عمل المندوب</label>
-                                    <input type="text" class="form-control" value="سائق خاص">
+
+                                <div class="form-control">
+                                    <label for="">مسار عمل المندوب</label>
+                                    <select class="form-select" name="Availability" id="Availability">
+                                        <option selected disabled>---</option>
+                                        <option <?php echo $beneficiary['Availability'] === "1" ? "selected" : ""?> value="1">مندوب لدى بريد إزهل</option>
+                                        <option <?php echo $beneficiary['Availability'] === "2" ? "selected" : ""?> value="2">مندوب الإنتقال بين المدن</option>
+                                        <option <?php echo $beneficiary['Availability'] === "3" ? "selected" : ""?> value="3">مندوب سائق خاص</option>
+                                        <option <?php echo $beneficiary['Availability'] === "4" ? "selected" : ""?> value="4">مندوب بنزين</option>
+                                        <option <?php echo $beneficiary['Availability'] === "5" ? "selected" : ""?> value="5">مندوب غاز</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -122,15 +166,15 @@ if (isset($_SESSION['id']) && isset($_SESSION['fname'])) {
                             <div class="card-body pb-2">
                                 <div class="form-group">
                                     <label class="form-label">كلمة المرور الحالية</label>
-                                    <input type="password" class="form-control">
+                                    <input type="password" name="OldPassword" value="<?php echo $beneficiary['Password']?>" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">كلمة المرور الجديدة</label>
-                                    <input type="password" class="form-control">
+                                    <input type="password" name="password" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">إعادة كلمة المرور الجديدة</label>
-                                    <input type="password" class="form-control">
+                                    <input type="password" name="password_confirm" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -138,28 +182,26 @@ if (isset($_SESSION['id']) && isset($_SESSION['fname'])) {
                             <div class="card-body pb-2">
                                 <div class="form-group">
                                     <label class="form-label">نبذة عن المندوب</label>
-                                    <textarea class="form-control" rows="5"
-                                        style="text-align: right;">اعمل كمندوب في منصة إزهل للخدمات اللوجستية</textarea>
+                                    <textarea class="form-control" name="notes" rows="5"
+                                              style="text-align: right;"><?php echo $beneficiary['notes']?></textarea>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">الميلاد</label>
-                                    <input type="text" class="form-control" value="May 3, 1995">
+                                    <input type="text" class="form-control" name="date_barth" value="<?php echo $beneficiary['date_barth']?>">
                                 </div>
+
                                 <div class="form-group">
                                     <label class="form-label">المنطقة</label>
-                                    <select class="custom-select">
-                                        <option selected>الخرمة</option>
-                                        <option>الخليج</option>
-                                        <option>الدغمية</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="area" value="<?php echo $beneficiary['area']?>">
                                 </div>
+
                             </div>
                             <hr class="border-light m-0">
                             <div class="card-body pb-2">
                                 <h6 class="mb-4">للتواصل</h6>
                                 <div class="form-group">
                                     <label class="form-label">رقم الجوال</label>
-                                    <input type="text" class="form-control" value="+0 (123) 456 7891">
+                                    <input type="text" class="form-control" name="phone" value="<?php echo $beneficiary['phone']?>">
                                 </div>
 
                             </div>
@@ -168,61 +210,38 @@ if (isset($_SESSION['id']) && isset($_SESSION['fname'])) {
                             <div class="card-body pb-2">
                                 <div class="form-group">
                                     <label class="form-label">Twitter</label>
-                                    <input type="text" class="form-control" value="https://twitter.com/user">
+                                    <input type="text" class="form-control" name="ac_tw" value="<?php echo $beneficiary['ac_tw']?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Facebook</label>
-                                    <input type="text" class="form-control" value="https://www.facebook.com/user">
+                                    <input type="text" class="form-control" name="ac_f" value="<?php echo $beneficiary['ac_f']?>">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">LinkedIn</label>
-                                    <input type="text" class="form-control" value>
+                                    <input type="text" class="form-control" name="ac_li" value="<?php echo $beneficiary['ac_li']?>">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Instagram</label>
-                                    <input type="text" class="form-control" value="https://www.instagram.com/user">
+                                    <input type="text" class="form-control" name="ac_in" value="<?php echo $beneficiary['ac_in']?>">
                                 </div>
                             </div>
 
-
-
-
-                            <div class="tab-pane fade" id="account-notifications">
-                                <div class="card-body pb-2">
-                                    <h6 class="mb-4">الطلبات</h6>
-                                    <div class="row">
-                                        <div class="col" style="text-align: center;">
-                                            <button type="button" class="btn btn-primary"
-                                                style="background-color: #06657a; width: 150px;">الحالية</button>
-                                            <button type="button" class="btn btn-primary"
-                                                style="background-color: #06657a; width: 150px;">السابقة</button>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-
-
-
-
-    
-   
-
-</form>
-  <script data-cfasync="false"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+                    <script data-cfasync="false"
                             src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-                        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-                        <script
+                    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+                    <script
                             src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
-                        <script type="text/javascript">
-</body>
+                    <script type="text/javascript">
 
-</html>
-
-<?php } else {
-    header("Location: login.php");
-    exit;
-} ?>
+                    </script>
+ <?php
+}
+}

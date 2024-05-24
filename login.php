@@ -31,6 +31,7 @@
                 <span>أو استخدم بريدك الالكتروني للتسجيل</span>
                 <input type="text" name="Fname" placeholder="الإسم">
                 <input type="email" name="Email" placeholder="البريد الالكتروني">
+                <input type="text" name="phone" placeholder="رقم الهاتف">
                 <input type="password" name="password" placeholder="كلمة المرور">
                 <div class="form-control">
                     <label for="">نوع تسجيل الدخول</label>

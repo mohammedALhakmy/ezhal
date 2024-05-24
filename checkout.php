@@ -52,6 +52,7 @@ if(!isset($_SESSION['uname'])){
             <br>
             <div class="form-container mt-5">
                 <form class="form-group" action="cod6e.php" method="post">
+                    <h2>البيانات المرسل</h2>
                     <input type="hidden" name="delivery_agent_id" value="<?php echo $serv_deli['ID_Number']?>">
                     <input type="hidden" name="type" value="<?php echo $result['id']?>">
                     <div class="form-group d-flex">
@@ -82,10 +83,31 @@ if(!isset($_SESSION['uname'])){
                         <label for="requestNumber">اكتب التفاضيل </label>
                         <input type="text" id="Select_Details" name="Select_Details">
                     </div>
+
+                    <div class="form-group">
+                        <label for="requestNumber">العنوان </label>
+                        <input type="text" id="address" name="address">
+                    </div>
+                    <h2>البيانات المستقبل</h2>
+                    <div class="form-group">
+                        <label for="requestNumber">اسم المستلم </label>
+                        <input type="text" id="name_futur" name="name_futur">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requestNumber">العنوان المستلم </label>
+                        <input type="text" id="address_m" name="address_m">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requestNumber">رقم الجوال </label>
+                        <input type="text" id="phone" name="phone">
+                    </div>
                     <div class="button-container">
                         <div class="form-group">
-                            <button type="submit" name="parcel">تحديث الطلب</button>
-                        </div></div>
+                            <button type="submit" name="parcel">حفظ الطلب</button>
+                        </div>
+                    </div>
                 </form>
             </div>
 
