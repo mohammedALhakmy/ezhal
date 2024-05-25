@@ -26,6 +26,7 @@ if(!isset($_SESSION['uid'])){
                                    <input type="radio" name="type" id="type_2" class="type" value="2">
                                    <label for="type_1">ذهاب فقط</label>
                                    <input type="radio" name="type" id="type_1" class="type" value="1">
+                                   <input type="hidden" name="delivery_agent_id" id="delivery_agent_id" value="">
                                    <p class="error-type"></p>
                                </div>
                                <br>
@@ -147,6 +148,7 @@ if(!isset($_SESSION['uid'])){
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+
         $(document).ready(function() {
             $('.type').change(function() {
                 var selectedType = $(this).val();

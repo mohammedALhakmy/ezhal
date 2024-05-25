@@ -36,11 +36,6 @@ if(!isset($_SESSION['uid'])){
         $results_parcel2 = $stmt_parcel->fetchAll(PDO::FETCH_ASSOC);
         $all_customers = array_merge($results_gasoline, $results_parcel2);
     }
-
-
-
-
-
     ?>
 
 

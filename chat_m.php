@@ -29,9 +29,10 @@ if(!isset($_SESSION['uid'])){
         $notes = $_POST['notes'];
         $beneficiary_id = $_POST['beneficiary_id'];
         $delivery_id = $_POST['delivery_id'];
-        $stmt = $conn->prepare("INSERT INTO `chat`(`beneficiary_id`,`delivery_agent_id`,`notes`)
-                                VALUES (:beneficiary_id,:delivery_agent_id,:notes)");
-        $stmt->execute(['beneficiary_id'=>$beneficiary_id,'delivery_agent_id' => $delivery_id,'notes'=>$notes]);
+        $sender = $_POST['sender'];
+        $stmt = $conn->prepare("INSERT INTO `chat`(`beneficiary_id`,`delivery_agent_id`,`notes`,`sender`)
+                                VALUES (:beneficiary_id,:delivery_agent_id,:notes,:sender)");
+        $stmt->execute(['beneficiary_id'=>$beneficiary_id,'delivery_agent_id' => $delivery_id,'notes'=>$notes,'sender'=>$sender]);
         header('location: chat.php');
     }
     ?>
@@ -46,20 +47,7 @@ if(!isset($_SESSION['uid'])){
         <style>
 
 
-            .chat-container {
-                margin: 201px auto;
-                max-width: 950px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                overflow: hidden;
-            }
 
-            .chat-header {
-                background-color: #333;
-                color: #fff;
-                padding: 10px;
-                text-align: center;
-            }
 
             .chat-messages {
                 padding: 10px;
@@ -144,50 +132,107 @@ if(!isset($_SESSION['uid'])){
             }
 
         </style>
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+
+            .chat-container {
+                width: 400px;
+                margin: 50px auto;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+
+            .chat-messages {
+                height: 300px;
+                overflow-y: scroll;
+                padding: 10px;
+            }
+            .chat-container {
+                margin: 201px auto;
+                max-width: 950px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+
+            .chat-header {
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .message {
+                padding: 5px 10px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                max-width: 70%;
+            }
+
+            .received-message {
+                background-color: #f2f2f2;
+                float: right;
+            }
+
+            .sent-message {
+                background-color: #d4e2d4;
+                float: left;
+            }
+
+            .message p {
+                margin: 5px 0;
+            }
+        </style>
     </head>
     <body>
-    <div style="display: flex;">
-        <div class="chat-container" style="flex: 3;">
-            <div class="chat-header">
-                <?php
-                if (isset($_SESSION['delivery_dashboard'])){
-                    echo "شات مع العملاء";
-                } else {
-                    echo "شات مع المندوبين";
-                }
-                ?>
-            </div>
-            <form action="chat_m.php" method="post">
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message" style="background-color: #aab9bf">
-                        <?php
-                        if (isset($_SESSION['delivery_id'])){
-                            echo '<input type="hidden" name="delivery_id" value="'.$_SESSION['delivery_id'].'">';
-                            echo '<input type="hidden" name="beneficiary_id" value="'.$_GET['beneficiary_id'].'">';
-                        }else{
-                            echo '<input type="hidden" name="beneficiary_id" value="'.$_SESSION['bene_id'].'">';
-                            echo '<input type="hidden" name="delivery_id" value="'.$_GET['delivery_agent_id'].'">';
-                        }
-                        if ($results) {
-                            foreach ($results as $row)
-                            {
-                                echo "<p style='margin-bottom: 10px;border-bottom: 2px solid #8a1784'>" . $row['notes'] . "</p>";
-                            }
-                        }
-                        ?>
-                    </div>
-                </div>
-                <div class="chat-input">
-                    <input type="text" id="message-input" name="notes" placeholder="كتابة محتوى الرساله ...">
-                    <button type="submit" name="submit">ارسال الرساله</button>
-                </div>
-            </form>
-
+    <div class="chat-container">
+        <div class="chat-header">
+            <?php
+            if (isset($_SESSION['delivery_dashboard'])){
+                echo "شات مع العملاء";
+            } else {
+                echo "شات مع المندوبين";
+            }
+            ?>
         </div>
-    </div>
+        <form action="chat_m.php" method="post">
+        <div class="chat-messages">
+             <?php
+                if (isset($_SESSION['delivery_id'])){
+                    echo '<input type="hidden" name="delivery_id" value="'.$_SESSION['delivery_id'].'">';
+                    echo '<input type="hidden" name="beneficiary_id" value="'.$_GET['beneficiary_id'].'">';
+                    echo '<input type="hidden" name="sender" value="2">';
+                }else{
+                    echo '<input type="hidden" name="beneficiary_id" value="'.$_SESSION['bene_id'].'">';
+                    echo '<input type="hidden" name="delivery_id" value="'.$_GET['delivery_agent_id'].'">';
+                    echo '<input type="hidden" name="sender" value="1">';
+                }
 
+             if ($results) {
+                 foreach ($results as $row)
+                 {
+                     if ($row['sender'] === "2") {
+                         echo "<div class='message received-message'><p>" . $row['notes'] . "</p></div>";
+                     }else if ($row['sender'] == "1"){
+                         echo "<div class='message sent-message'><p>" . $row['notes'] . "</p></div>";
+                     }
+                 }
+             }
+                        ?>
+            <div class="chat-input">
+                <input type="text" id="message-input" name="notes" placeholder="كتابة محتوى الرساله ...">
+                <button type="submit" name="submit">ارسال الرساله</button>
+            </div>
+        </div>
+        </form>
+    </div>
     </body>
     </html>
-
     <?php
 }

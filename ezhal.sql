@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2024 at 08:15 PM
+-- Generation Time: May 25, 2024 at 10:03 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.2.4
 
@@ -123,24 +123,34 @@ CREATE TABLE `chat` (
   `id` int(11) NOT NULL,
   `beneficiary_id` int(11) NOT NULL,
   `delivery_agent_id` int(11) NOT NULL,
-  `notes` text NOT NULL
+  `notes` text NOT NULL,
+  `sender` enum('1','2') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `chat`
 --
 
-INSERT INTO `chat` (`id`, `beneficiary_id`, `delivery_agent_id`, `notes`) VALUES
-(1, 1, 4, 'ملاحظات  لا يوجد'),
-(2, 1, 4, 'اهلا بوصل قريب'),
-(5, 1, 4, 'كيفك ووين وصلت يا غالي'),
-(6, 1, 6, 'صباح الخير'),
-(7, 1, 6, 'كيفك ووين وصلت يا غالي'),
-(8, 1, 6, 'قريب ان شاء الله مسافه الطريق فقط'),
-(9, 1, 7, 'صباح الجن ووينك وسيم'),
-(10, 1, 7, 'موجود يا جني '),
-(11, 1, 7, 'ليش تقول جني انت جني الليل تاخرت ياعيب عليك تبا لك'),
-(12, 1, 7, 'تباك لك انت');
+INSERT INTO `chat` (`id`, `beneficiary_id`, `delivery_agent_id`, `notes`, `sender`) VALUES
+(1, 1, 4, 'ملاحظات  لا يوجد', '1'),
+(2, 1, 4, 'اهلا بوصل قريب', '2'),
+(5, 1, 4, 'كيفك ووين وصلت يا غالي', '2'),
+(6, 1, 6, 'صباح الخير', '2'),
+(7, 1, 6, 'كيفك ووين وصلت يا غالي', '1'),
+(8, 1, 6, 'قريب ان شاء الله مسافه الطريق فقط', '2'),
+(9, 1, 7, 'صباح الجن ووينك وسيم', '1'),
+(10, 1, 7, 'موجود يا جني ', '2'),
+(11, 1, 7, 'ليش تقول جني انت جني الليل تاخرت ياعيب عليك تبا لك', '1'),
+(12, 1, 7, 'تباك لك انت', '2'),
+(13, 1, 7, 'قلك المشروع غلط وفيه مشاكل', '1'),
+(14, 1, 7, 'قريب ان شاء الله مسافه الطريق فقط', '2'),
+(15, 1, 7, 'قلك المشروع غلط وفيه مشاكل', '1'),
+(16, 1, 6, 'كيف الشغل معك', '1'),
+(17, 1, 6, 'تمام وينك انت وين وصلت', '1'),
+(18, 1, 6, 'مساء الخير', '2'),
+(19, 1, 6, 'مساء الفل', '1'),
+(20, 1, 6, 'وين وصلت', '2'),
+(21, 1, 6, 'موجود في ابطريق', '1');
 
 -- --------------------------------------------------------
 
@@ -178,7 +188,8 @@ INSERT INTO `delivery_agent` (`ID_Number`, `Fname`, `Lname`, `Email`, `photo`, `
 (4, 'ali', 'ali', 'ali@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$06$Xv6Z/YpCRIg/TyOggcyiq.awISmKKF9nOAZLKoWrj46gDyfK0bY3C', '2', '4'),
 (5, 'Ahmed', 'Ahmed', 'ahmed@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$06$Xv6Z/YpCRIg/TyOggcyiq.awISmKKF9nOAZLKoWrj46gDyfK0bY3C', '2', '5'),
 (6, 'Mrad', 'Mrad', 'mrad@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$06$Qj1NIBREYmlv7X0eOwqF.utG62VQrWZgmROmEv26ehkshudjl6ycC', '5', '1'),
-(7, 'havez', NULL, 'havez@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$06$Qj1NIBREYmlv7X0eOwqF.utG62VQrWZgmROmEv26ehkshudjl6ycC', '', '1');
+(7, 'havez', NULL, 'havez@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$06$Qj1NIBREYmlv7X0eOwqF.utG62VQrWZgmROmEv26ehkshudjl6ycC', '', '1'),
+(8, 'basil', NULL, 'basil@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '$2y$06$Xv6Z/YpCRIg/TyOggcyiq.awISmKKF9nOAZLKoWrj46gDyfK0bY3C', '', '4');
 
 -- --------------------------------------------------------
 
@@ -673,7 +684,8 @@ INSERT INTO `transportation_between_cities` (`id`, `type`, `adults`, `children`,
 (1, '1', '2', '5', '1', '1', '1', 'جدة', 'الحساء', 'اليوم', 1),
 (2, '1', '2', '5', '1', '1', '1', 'جدة', 'الحساء', 'اليوم', 1),
 (3, '1', '2', '5', '1', '1', '1', 'جدة', 'الحساء', 'اليوم', 1),
-(4, '1', '2', '5', '1', '1', '1', 'جدة', 'الحساء', 'اليوم', 1);
+(4, '1', '2', '5', '1', '1', '1', 'جدة', 'الحساء', 'اليوم', 1),
+(5, '1', '', '', '', '', '', 'الدمام', 'مكة', 'اليوم', 1);
 
 -- --------------------------------------------------------
 
@@ -933,13 +945,13 @@ ALTER TABLE `book_driver`
 -- AUTO_INCREMENT for table `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `delivery_agent`
 --
 ALTER TABLE `delivery_agent`
-  MODIFY `ID_Number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_Number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `details_the_trip`
@@ -1065,7 +1077,7 @@ ALTER TABLE `track_parcel`
 -- AUTO_INCREMENT for table `transportation_between_cities`
 --
 ALTER TABLE `transportation_between_cities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `trip_orde`

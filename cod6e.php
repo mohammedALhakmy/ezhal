@@ -273,7 +273,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['type'])) {
             <?php
             if ($results) {
                 foreach ($results as $row) {
-                    echo "<option value='" . $row['from_city'] . "'>" . $row['from_city'] . "</option>";
+                    echo "<option value='" . $row['from_city'] . "' data-delivery-agent-id='" . $row['id'] . "'>" . $row['from_city'] . "</option>";
+
                 }
             } else {
                 echo "<option value=''>لا توجد بيانات متاحة</option>";
@@ -286,8 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['type'])) {
             <?php
             if ($results) {
                 foreach ($results as $row) {
-                    echo "<option value='" . $row['to_city'] . "'>" . $row['to_city'] . "</option>";
-                }
+                    echo "<option value='" . $row['to_city'] . "' >" . $row['to_city'] . "</option>";                }
             } else {
                 echo "<option value=''>لا توجد بيانات متاحة</option>";
             }
